@@ -14,6 +14,8 @@ export default function Home() {
   const [personaA,setPersonaA] = useState(initialStatePersona)
   const [personas, setPersonas] = useState<Persona[]>([])
   const [eNombre, setENombre] = useState("")
+  const [editIndex, setEditIndex] = useState <number | null> (null) // se agrego el useState para editar el index
+  const [refrescar, setRefrescar] = useState(0) // Se agrego al useState de refrescar
 
   useEffect(()=>{
     let listadoStr = miStorage.getItem("personas")
@@ -21,10 +23,14 @@ export default function Home() {
       let listado = JSON.parse(listadoStr)
       setPersonas(listado)
     }
-  },[]) 
+  },[refrescar]) //se agrego el rrefrescar
 
   const handleRegistrar = ()=>{
-    miStorage.setItem("personas",JSON.stringify([...personas,persona]))
+    const nuevasPersonas = [...personas, persona] //se agrego esto
+    setPersonas(nuevasPersonas)//se agrego esto
+    miStorage.setItem("personas", JSON.stringify(nuevasPersonas))//se agrego esto
+    setPersona(initialStatePersona)//agregue esto
+    setRefrescar(r=> r+1)//agregue esto
   }
   const handlePersona = (name:string,value:string)=>{
     setPersona(
@@ -37,11 +43,24 @@ export default function Home() {
     }
   }
 
-  const handleActualizar = ()=>{
-    alert("Falta esto")
+  const handlePersonaA= (name:string, value:string) => { //Agregue esto
+    setPersonaA({...personaA, [name]: value }) //Agregue esto
   }
-  const traerPersona = (p:Persona)=>{
+
+  const handleActualizar = ()=>{
+    if (editIndex !== null) { //Agregue esto
+      const personasActualizadas = [...personas]//Agregue esto
+      personasActualizadas[editIndex] = personaA//Agregue esto
+      setPersonas(personasActualizadas)//Agregue esto
+      miStorage.setItem("personas", JSON.stringify(personasActualizadas))//Agregue esto
+      setPersonaA(initialStatePersona)//Agregue esto
+      setEditIndex(null)
+      setRefrescar(r => r + 1)
+    }
+  }
+  const traerPersona = (p:Persona, index:number)=>{
     setPersonaA(p)
+    setEditIndex(index)
   }
   return (
         <>
@@ -65,7 +84,7 @@ export default function Home() {
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
-        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona}/>
+        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} actualizar={refrescar}/>
         <form>
           <h1>{persona.nombre} {persona.apellido}</h1>
           <label>Nombre</label><br/>
@@ -74,7 +93,7 @@ export default function Home() {
               type="text" 
               placeholder="Nombre"
               value={personaA.nombre}
-              onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+              onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span>{eNombre}</span>
           
           <label>Apellido</label><br/>
@@ -83,7 +102,7 @@ export default function Home() {
               type="text"
               placeholder="Apellido"
               value={personaA.apellido}
-              onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
+              onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span></span>
           <button 
           onClick={()=>{handleActualizar()}}>Editar</button>

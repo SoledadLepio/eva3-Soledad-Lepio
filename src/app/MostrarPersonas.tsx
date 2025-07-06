@@ -3,7 +3,8 @@ import { Persona } from './Interfaces/IPersona'
 
 interface Props{
   saludo : string,
-  traerPersona: (p:Persona) => void
+  traerPersona: (p:Persona, index: number) => void
+  actualizar: number
 }
 
 export const MostrarPersonas = (props:Props) => {
@@ -18,7 +19,7 @@ export const MostrarPersonas = (props:Props) => {
       },[])
     const queEditar = (index:number) => {
       alert("Le diste a "+index)
-      props.traerPersona(personas[index])
+      props.traerPersona(personas[index], index)
     } 
   return (
     <>
