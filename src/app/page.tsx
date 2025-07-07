@@ -62,6 +62,15 @@ export default function Home() {
     setPersonaA(p)
     setEditIndex(index)
   }
+
+  const eliminarPersona = (index:number) => { //Agregue esto
+    const nuevasPersonas = personas.filter((_,i) => i !== index) //Agregue esto
+    setPersonas(nuevasPersonas) //Agregue esto
+    miStorage.setItem("personas", JSON.stringify(nuevasPersonas)) //Agregue esto
+    setRefrescar(r=> r+1) //nuevo
+  }
+
+
   return (
         <>
         <form>
@@ -84,7 +93,7 @@ export default function Home() {
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
-        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} actualizar={refrescar}/>
+        <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} actualizar={refrescar} onEliminar={eliminarPersona}/>
         <form>
           <h1>{persona.nombre} {persona.apellido}</h1>
           <label>Nombre</label><br/>
@@ -107,7 +116,7 @@ export default function Home() {
           <button 
           onClick={()=>{handleActualizar()}}>Editar</button>
         </form>
-        
+
         </>
       );
 }
