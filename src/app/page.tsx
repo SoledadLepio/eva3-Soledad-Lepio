@@ -8,7 +8,8 @@ const  initialStatePersona:Persona = {
   apellido: "",
   nombre: "",
   edad: 0,
-  pokemon: ""
+  pokemon: "",
+  descripcion: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -120,6 +121,14 @@ export default function Home() {
             <option value="Eevee">Eevee</option> 
           </select><br />
 
+          <label>¿Por que es tu inicial favorito?</label><br />
+          <textarea 
+            name="descripcion"
+            placeholder="¿Por que es tu inicial favorito?"
+            value={persona.descripcion}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
+          ></textarea><br />
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -169,6 +178,14 @@ export default function Home() {
             <option value="Pikachu">Pikachu</option>
             <option value="Eevee">Eevee</option> 
           </select><br />
+
+          <label>¿Por que es tu inicial favorito?</label><br />
+          <textarea 
+            name="descripcion"
+            placeholder="¿Por que es tu inicial favorito?"
+            value={personaA.descripcion}
+            onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
+          ></textarea><br />
 
 
           <button 
