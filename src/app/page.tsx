@@ -9,7 +9,8 @@ const  initialStatePersona:Persona = {
   nombre: "",
   edad: 0,
   pokemon: "",
-  descripcion: ""
+  descripcion: "",
+  fechaNacimiento: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -129,6 +130,14 @@ export default function Home() {
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           ></textarea><br />
 
+          <label>Fecha de nacimineto</label>
+          <input 
+            name="fechaNacimiento"
+            type="date"
+            value={persona.fechaNacimiento}
+            onChange={(e)=> handlePersona(e.currentTarget.name, e.currentTarget.value)}
+          /><br/>
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -186,6 +195,14 @@ export default function Home() {
             value={personaA.descripcion}
             onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
           ></textarea><br />
+
+          <label>Fecha de nacimineto</label>
+          <input 
+            name="fechaNacimiento"
+            type="date"
+            value={personaA.fechaNacimiento}
+            onChange={(e)=> handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
+          /><br/>
 
 
           <button 
