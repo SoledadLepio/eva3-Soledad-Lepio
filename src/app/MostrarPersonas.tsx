@@ -34,6 +34,7 @@ export const MostrarPersonas = (props:Props) => {
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Edad</th>
+            <th>Pokemon</th>
             <th>Accion</th>
           </tr>
         </thead>
@@ -44,6 +45,7 @@ export const MostrarPersonas = (props:Props) => {
                 <td>{p.nombre}</td>
                 <td>{p.apellido}</td>
                 <td>{p.edad}</td>
+                <td>{p.pokemon}</td>
                 <td><button
                         onClick={()=>queEditar(index)}>Editar</button><button onClick={() => eliminarPersona(index)}>Eliminar</button></td>
               </tr>

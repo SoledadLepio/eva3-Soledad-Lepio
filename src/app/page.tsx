@@ -7,7 +7,8 @@ import MostrarPersonas from "./MostrarPersonas";
 const  initialStatePersona:Persona = {
   apellido: "",
   nombre: "",
-  edad: 0
+  edad: 0,
+  pokemon: ""
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -102,6 +103,23 @@ export default function Home() {
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           /><br />
 
+          <label>Elige tu Pokemon favorito</label> <br />
+          <select
+            name="pokemon"
+            value={persona.pokemon}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}>
+            
+            <option value="">-- ¿Cual es tu inicial favorito?</option>
+            <option value="Charmander">Charmander</option>
+            <option value="Bulbasaur">Bulbasaur</option>
+            <option value="Squirtle">Squirtle</option>
+            <option value="Cyndaquil">Cyndaquil</option>
+            <option value="Chikorita">Chikorita</option>
+            <option value="Totodile">Totodile</option>
+            <option value="Pikachu">Pikachu</option>
+            <option value="Eevee">Eevee</option> 
+          </select><br />
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -134,6 +152,23 @@ export default function Home() {
             value={personaA.edad}
             onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
           ></input><br/>
+
+          <label>Elige tu puchamon</label><br />
+          <select
+            name="pokemon"
+            value={personaA.pokemon}
+            onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}>
+            
+            <option value="">-- ¿Cual es tu inicial favorito?</option>
+            <option value="Charmander">Charmander</option>
+            <option value="Bulbasaur">Bulbasaur</option>
+            <option value="Squirtle">Squirtle</option>
+            <option value="Cyndaquil">Cyndaquil</option>
+            <option value="Chikorita">Chikorita</option>
+            <option value="Totodile">Totodile</option>
+            <option value="Pikachu">Pikachu</option>
+            <option value="Eevee">Eevee</option> 
+          </select><br />
 
 
           <button 

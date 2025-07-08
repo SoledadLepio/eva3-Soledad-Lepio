@@ -1,5 +1,6 @@
 export interface Persona{
   nombre : string,
   apellido : string,
-  edad : number //agregado nuevo
+  edad : number, //agregado nuevo
+  pokemon: string
 }
