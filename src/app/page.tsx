@@ -6,7 +6,8 @@ import MostrarPersonas from "./MostrarPersonas";
 
 const  initialStatePersona:Persona = {
   apellido: "",
-  nombre: ""
+  nombre: "",
+  edad: 0
 }
 export default function Home() {
   const miStorage = window.localStorage
@@ -33,6 +34,7 @@ export default function Home() {
     setRefrescar(r=> r+1)//agregue esto
   }
   const handlePersona = (name:string,value:string)=>{
+    const parsedValue = name == "edad" ? parseInt (value) || 0 : value //agregue esto
     setPersona(
       { ...persona, [name] : value  }
     )
@@ -90,6 +92,16 @@ export default function Home() {
               placeholder="Apellido"
               onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span></span>
+
+          <label>Edad</label><br /> 
+          <input
+            name="edad"
+            type="number"
+            placeholder="Edad"
+            value={persona.edad}
+            onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
+          /><br />
+
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
@@ -113,6 +125,17 @@ export default function Home() {
               value={personaA.apellido}
               onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
           <span></span>
+
+          <label>Edad</label><br /> 
+          <input
+            name="edad"
+            type="number"
+            placeholder="Edad"
+            value={personaA.edad}
+            onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
+          ></input><br/>
+
+
           <button 
           onClick={()=>{handleActualizar()}}>Editar</button>
         </form>
