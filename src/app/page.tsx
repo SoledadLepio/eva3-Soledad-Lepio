@@ -17,9 +17,19 @@ export default function Home() {
   const [persona, setPersona] = useState(initialStatePersona)
   const [personaA,setPersonaA] = useState(initialStatePersona)
   const [personas, setPersonas] = useState<Persona[]>([])
-  const [eNombre, setENombre] = useState("")
+  //const [eNombre, setENombre] = useState("")
   const [editIndex, setEditIndex] = useState <number | null> (null) // se agrego el useState para editar el index
   const [refrescar, setRefrescar] = useState(0) // Se agrego al useState de refrescar
+  const [errores, setErrores] = useState({
+    nombre:"",
+    apellido: "",
+    edad:"",
+    pokemon:"",
+    descripcion:"",
+    fechaNacimiento:""
+  })
+
+  const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/ //agregue  esto para la validacion de nombre y apellido
 
   useEffect(()=>{
     let listadoStr = miStorage.getItem("personas")
@@ -29,7 +39,44 @@ export default function Home() {
     }
   },[refrescar]) //se agrego el rrefrescar
 
+
+  const validadores: Record<string, (value: string) => string> = {
+    nombre: (value) => {
+      if (!soloLetras.test(value)) return "Solo se permiten letras";
+      if (value.length < 3) return "Debe tener al menos 3 letras";
+      return "";
+    },
+    apellido: (value) => {
+      if (!soloLetras.test(value)) return "Solo se permiten letras";
+      if (value.length < 3) return "Debe tener al menos 3 letras";
+      return "";
+    },
+    edad: (value) => {
+      const edadNum = parseInt(value);
+      if (isNaN(edadNum) || edadNum <= 0 || edadNum > 100) return "Edad debe ser entre 1 y 100";
+      return "";
+    },
+    pokemon: (value) => value === "" ? "Selecciona un Pokémon" : "",
+    descripcion: (value) => value.length < 10 ? "Debe tener al menos 10 caracteres" : "",
+    fechaNacimiento: (value) => {
+      const fechaActual = new Date();
+      const fechaIngresada = new Date(value);
+      return fechaIngresada > fechaActual ? "No puede ser una fecha futura" : ""
+    }
+  }
+
+    const validar = (name: string, value: string) => {
+    const validador = validadores[name];
+    if (validador) {
+      const errorMsg = validador(value);
+      setErrores((prev) => ({ ...prev, [name]: errorMsg }));
+    }
+  };
+
+
   const handleRegistrar = ()=>{
+    const hayErrores = Object.values(errores).some(error => error !== "")
+    if (hayErrores) return
     const nuevasPersonas = [...personas, persona] //se agrego esto
     setPersonas(nuevasPersonas)//se agrego esto
     miStorage.setItem("personas", JSON.stringify(nuevasPersonas))//se agrego esto
@@ -38,18 +85,13 @@ export default function Home() {
   }
   const handlePersona = (name:string,value:string)=>{
     const parsedValue = name == "edad" ? parseInt (value) || 0 : value //agregue esto
-    setPersona(
-      { ...persona, [name] : value  }
-    )
-    if (name == "nombre" && value.length<3){
-      setENombre("El nombre debe tener 3 caracteres como minimo")
-    }else if(name=="nombre" && value.length>=3){
-      setENombre("")
-    }
+    setPersona({ ...persona,[name]: parsedValue})
+    validar(name, value)
   }
 
   const handlePersonaA= (name:string, value:string) => { //Agregue esto
-    setPersonaA({...personaA, [name]: value }) //Agregue esto
+    setPersonaA({...personaA, [name]: name == "edad" ? parseInt(value) || 0 : value }) //Agregue esto
+    validar(name, value)
   }
 
   const handleActualizar = ()=>{
@@ -86,7 +128,7 @@ export default function Home() {
               type="text" 
               placeholder="Nombre"
               onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span>{eNombre}</span>
+          <span>{errores.nombre}</span>
           
           <label>Apellido</label><br/>
           <input 
@@ -94,7 +136,7 @@ export default function Home() {
               type="text"
               placeholder="Apellido"
               onChange={(e)=>{handlePersona(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span></span>
+          <span>{errores.apellido}</span>
 
           <label>Edad</label><br /> 
           <input
@@ -104,6 +146,7 @@ export default function Home() {
             value={persona.edad}
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           /><br />
+          <span>{errores.edad}</span>
 
           <label>Elige tu Pokemon favorito</label> <br />
           <select
@@ -121,6 +164,7 @@ export default function Home() {
             <option value="Pikachu">Pikachu</option>
             <option value="Eevee">Eevee</option> 
           </select><br />
+          <span>{errores.pokemon}</span>
 
           <label>¿Por que es tu inicial favorito?</label><br />
           <textarea 
@@ -129,6 +173,7 @@ export default function Home() {
             value={persona.descripcion}
             onChange={(e) => handlePersona(e.currentTarget.name, e.currentTarget.value)}
           ></textarea><br />
+          <span>{errores.descripcion}</span>
 
           <label>Fecha de nacimineto</label>
           <input 
@@ -137,6 +182,7 @@ export default function Home() {
             value={persona.fechaNacimiento}
             onChange={(e)=> handlePersona(e.currentTarget.name, e.currentTarget.value)}
           /><br/>
+          <span>{errores.fechaNacimiento}</span>
 
           <button 
           onClick={()=>{handleRegistrar()}}>Registrar</button>
@@ -151,7 +197,7 @@ export default function Home() {
               placeholder="Nombre"
               value={personaA.nombre}
               onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span>{eNombre}</span>
+          <span>{errores.nombre}</span>
           
           <label>Apellido</label><br/>
           <input 
@@ -160,7 +206,7 @@ export default function Home() {
               placeholder="Apellido"
               value={personaA.apellido}
               onChange={(e)=>{handlePersonaA(e.currentTarget.name,e.currentTarget.value)}}/><br/>
-          <span></span>
+          <span>{errores.apellido}</span>
 
           <label>Edad</label><br /> 
           <input
@@ -170,6 +216,7 @@ export default function Home() {
             value={personaA.edad}
             onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
           ></input><br/>
+          <span>{errores.edad}</span>
 
           <label>Elige tu puchamon</label><br />
           <select
@@ -187,6 +234,7 @@ export default function Home() {
             <option value="Pikachu">Pikachu</option>
             <option value="Eevee">Eevee</option> 
           </select><br />
+          <span>{errores.pokemon}</span>
 
           <label>¿Por que es tu inicial favorito?</label><br />
           <textarea 
@@ -195,6 +243,7 @@ export default function Home() {
             value={personaA.descripcion}
             onChange={(e) => handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
           ></textarea><br />
+          <span>{errores.descripcion}</span>
 
           <label>Fecha de nacimineto</label>
           <input 
@@ -203,12 +252,11 @@ export default function Home() {
             value={personaA.fechaNacimiento}
             onChange={(e)=> handlePersonaA(e.currentTarget.name, e.currentTarget.value)}
           /><br/>
-
-
+          <span>{errores.fechaNacimiento}</span>
           <button 
           onClick={()=>{handleActualizar()}}>Editar</button>
         </form>
 
         </>
       );
-}
+    }
