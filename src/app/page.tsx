@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
+import { registrarPersona, obtenerPersonas } from "./Firebase/Promesas";
 
 
 const  initialStatePersona:Persona = {
@@ -32,12 +33,12 @@ export default function Home() {
   const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/ //agregue  esto para la validacion de nombre y apellido
 
   useEffect(()=>{
-    let listadoStr = miStorage.getItem("personas")
-    if(listadoStr != null){
-      let listado = JSON.parse(listadoStr)
+    const traerDatos = async () => {
+      const listado = await obtenerPersonas()
       setPersonas(listado)
     }
-  },[refrescar]) //se agrego el rrefrescar
+    traerDatos()
+  },[refrescar]) //se agrego el refrescar
 
 
   const validadores: Record<string, (value: string) => string> = {

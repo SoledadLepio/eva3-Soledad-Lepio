@@ -2,10 +2,9 @@ import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./Conexion";
 import { Persona } from "../Interfaces/IPersona";
 
+const coleccion = collection(db, "personas");
 
 export const registrarPersona = async(p:Persona)=>{
-
-// Add a new document with a generated id.
 const docRef = await addDoc(collection(db, "personas"), p);
 console.log("Document written with ID: ", docRef.id);
 
