@@ -5,12 +5,11 @@ import { obtenerPersonas } from './Firebase/Promesas'
 interface Props{
   saludo : string,
   traerPersona: (p:Persona, index: number) => void, // obtiene los datos del id escogido
-  onEliminar: (index: number) => void, //nuevo index number y eliminar
+  onEliminar: (id: string) => void, //nuevo index number y eliminar
   actualizar: number
 }
 
 export const MostrarPersonas = (props:Props) => {
-    const miStorage = window.localStorage
     const [personas, setPersonas] = useState<Persona[]>([])
      
     useEffect(()=>{
@@ -24,8 +23,8 @@ export const MostrarPersonas = (props:Props) => {
       alert("Le diste a "+index)
       props.traerPersona(personas[index], index)
     }
-    const eliminarPersona = (index: number) => {
-      props.onEliminar(index)
+    const eliminarPersona = (id: string) => {
+      props.onEliminar(id)
     }
   return (
     <>
@@ -45,7 +44,7 @@ export const MostrarPersonas = (props:Props) => {
         <tbody>
           {personas.map((p,index)=>{
             return(
-              <tr>
+              <tr key={p.id}>
                 <td>{p.nombre}</td>
                 <td>{p.apellido}</td>
                 <td>{p.edad}</td>
@@ -53,7 +52,7 @@ export const MostrarPersonas = (props:Props) => {
                 <td>{p.descripcion}</td>
                 <td>{p.fechaNacimiento}</td>
                 <td><button
-                        onClick={()=>queEditar(index)}>Editar</button><button onClick={() => eliminarPersona(index)}>Eliminar</button></td>
+                        onClick={()=>queEditar(index)}>Editar</button>{p.id ? ( <button onClick={() => eliminarPersona(p.id!)}>Eliminar</button>):(<span>Id no disponible</span>)}</td>
               </tr>
             )
           })}

@@ -1,7 +1,9 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "./Conexion";
 import { Persona } from "../Interfaces/IPersona";
-import {doc,updateDoc} from "firebase/firestore"
+import {doc,updateDoc} from "firebase/firestore";
+import {deleteDoc} from "firebase/firestore";
+
 
 const coleccion = collection(db, "personas");
 
@@ -21,13 +23,17 @@ export const actualizarPersona = async (p: Persona) => {
   await updateDoc(ref, personaSinId);
 };
 
+export const eliminarPersona = async(id: string) => {
+    const ref = doc(db, "personas", id);
+    await deleteDoc(ref);
+}
 
 export const obtenerPersonas = async()=>{
     const querySnapshot = await getDocs(collection(db, "personas"));
     let listado:Persona[] = []
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
-  let persona:Persona = {
+  let persona:Persona & {id: string} = {
     id:doc.id,
     nombre: doc.data().nombre,
     apellido: doc.data().apellido,

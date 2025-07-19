@@ -4,6 +4,8 @@ import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
 import { registrarPersona, obtenerPersonas } from "./Firebase/Promesas";
 import {actualizarPersona} from "./Firebase/Promesas";
+import { eliminarPersona as eliminarPersonaFirebase } from "./Firebase/Promesas";
+
 
 const  initialStatePersona:Persona = {
   id:"",
@@ -107,10 +109,9 @@ export default function Home() {
     setEditIndex(index)
   }
 
-  const eliminarPersona = (index:number) => { //Agregue esto
-    const nuevasPersonas = personas.filter((_,i) => i !== index) //Agregue esto
-    setPersonas(nuevasPersonas) //Agregue esto
-    miStorage.setItem("personas", JSON.stringify(nuevasPersonas)) //Agregue esto
+  const eliminarPersona = async (id?:string) => {
+    if (!id) return
+    await eliminarPersonaFirebase(id)
     setRefrescar(r=> r+1) //nuevo
   }
 
