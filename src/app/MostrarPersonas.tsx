@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Persona } from './Interfaces/IPersona'
+import { obtenerPersonas } from './Firebase/Promesas'
 
 interface Props{
   saludo : string,
@@ -11,12 +12,13 @@ interface Props{
 export const MostrarPersonas = (props:Props) => {
     const miStorage = window.localStorage
     const [personas, setPersonas] = useState<Persona[]>([])
-     useEffect(()=>{
-        let listadoStr = miStorage.getItem("personas")
-        if(listadoStr != null){
-          let listado = JSON.parse(listadoStr)
+     
+    useEffect(()=>{
+        const traerDatos = async () => {
+          const listado = await obtenerPersonas()
           setPersonas(listado)
         }
+        traerDatos()
       },[props.actualizar])
     const queEditar = (index:number) => {
       alert("Le diste a "+index)

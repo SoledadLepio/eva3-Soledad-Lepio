@@ -75,12 +75,10 @@ export default function Home() {
   };
 
 
-  const handleRegistrar = ()=>{
+  const handleRegistrar = async ()=>{
     const hayErrores = Object.values(errores).some(error => error !== "")
     if (hayErrores) return
-    const nuevasPersonas = [...personas, persona] //se agrego esto
-    setPersonas(nuevasPersonas)//se agrego esto
-    miStorage.setItem("personas", JSON.stringify(nuevasPersonas))//se agrego esto
+    await registrarPersona(persona)
     setPersona(initialStatePersona)//agregue esto
     setRefrescar(r=> r+1)//agregue esto
   }
@@ -186,6 +184,7 @@ export default function Home() {
           <span>{errores.fechaNacimiento}</span>
 
           <button 
+          type="button"
           onClick={()=>{handleRegistrar()}}>Registrar</button>
         </form>
         <MostrarPersonas saludo = "Hola Como estas" traerPersona = {traerPersona} actualizar={refrescar} onEliminar={eliminarPersona}/>
@@ -255,6 +254,7 @@ export default function Home() {
           /><br/>
           <span>{errores.fechaNacimiento}</span>
           <button 
+          type="button"
           onClick={()=>{handleActualizar()}}>Editar</button>
         </form>
 
