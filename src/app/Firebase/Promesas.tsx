@@ -9,8 +9,6 @@ const coleccion = collection(db, "personas");
 
 export const registrarPersona = async(p:Persona)=>{
 const docRef = await addDoc(collection(db, "personas"), p);
-console.log("Document written with ID: ", docRef.id);
-
 }
 
 export const actualizarPersona = async (p: Persona) => {
@@ -43,7 +41,6 @@ querySnapshot.forEach((doc) => {
     fechaNacimiento: doc.data().fechaNacimiento
   }
   listado.push(persona)
-  console.log(doc.id, " => ", doc.data());
 });
     return listado
 }
