@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { Persona } from "./Interfaces/IPersona";
 import MostrarPersonas from "./MostrarPersonas";
 import { registrarPersona, obtenerPersonas } from "./Firebase/Promesas";
-
+import {actualizarPersona} from "./Firebase/Promesas";
 
 const  initialStatePersona:Persona = {
+  id:"",
   apellido: "",
   nombre: "",
   edad: 0,
@@ -93,12 +94,9 @@ export default function Home() {
     validar(name, value)
   }
 
-  const handleActualizar = ()=>{
-    if (editIndex !== null) { //Agregue esto
-      const personasActualizadas = [...personas]//Agregue esto
-      personasActualizadas[editIndex] = personaA//Agregue esto
-      setPersonas(personasActualizadas)//Agregue esto
-      miStorage.setItem("personas", JSON.stringify(personasActualizadas))//Agregue esto
+  const handleActualizar = async ()=>{
+    if (personaA.id) {
+      await actualizarPersona(personaA)
       setPersonaA(initialStatePersona)//Agregue esto
       setEditIndex(null)
       setRefrescar(r => r + 1)
